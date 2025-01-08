@@ -56,10 +56,12 @@ def analytics():
 
         grouped_data.plot(kind='pie', autopct='%0.0f%%', startangle=90, colors=plt.cm.Paired.colors)
         st.pyplot(fig)
-
+        st.title("Price Distribution by Medicine: ")
         fig, ax = plt.subplots()
         sns.boxplot(x='name', y='price', data=df)
         plt.title('Price Distribution by Medicine')
+        plt.xlabel('Medicine Name')
+        plt.ylabel('Price')
         st.pyplot(fig)
 
 
