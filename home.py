@@ -1,14 +1,8 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
-import base64
-from streamlit_lottie import st_lottie
 import requests
-import json
-# from reume_page import resume
-# from experience_page import experience
-# from project_page import projects
-# from contact_form import contact
 from datainput import datainput
+from datainput import data_first_time
 from analytics import analytics
  # Page setup
 st.set_page_config(
@@ -35,11 +29,10 @@ def load_lottieurl(url: str):
 
 
 
-# Display logo in the sidebar
+# sidebar
 
 with st.sidebar:
-    # Other sidebar elements
-    # st.sidebar.image("logo_image.png", width=200, use_column_width=True)
+    
     # Option menu in sidebar
     pages = ["Input Data", "Analytics"]
     nav_tab_op = option_menu(
@@ -55,6 +48,9 @@ if nav_tab_op == "Input Data":
 
 elif nav_tab_op == "Analytics":
     analytics()
+
+if st.sidebar.button("First time user"):
+    data_first_time()
 # elif nav_tab_op == "Experience":
 #     experience()
 # elif nav_tab_op == "Projects":
