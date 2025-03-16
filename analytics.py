@@ -54,7 +54,7 @@ def analytics():
         ax.pie(product_revenue["total_price"], labels=product_revenue["product_name"], autopct="%1.1f%%")
         st.pyplot(fig)
 
-        fig = px.pie(product_revenue["total_price"], names='product_name')
+        fig = px.pie(product_revenue, values="total_price", names='product_name')
         st.plotly_chart(fig, theme="streamlit")
     conn.close()
 
