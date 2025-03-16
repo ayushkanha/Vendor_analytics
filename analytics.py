@@ -32,6 +32,10 @@ def analytics():
         plot = sns.pairplot(df)
  
         # Display the plot in Streamlit
+        product_revenue = sales_df.groupby("product_id")["total_price"].sum().reset_index()
+
+        # Merge with product names from product_df
+        product_revenue = product_revenue.merge(product_df[["product_id", "product_name"]], on="product_id")
         st.title("**Revenue Contribution by :blue[Product]**")
         fig, ax = plt.subplots()
         ax.pie(product_revenue["total_price"], labels=product_revenue["product_name"], autopct="%1.1f%%")
