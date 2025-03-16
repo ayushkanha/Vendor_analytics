@@ -31,7 +31,7 @@ def analytics():
         plot = sns.pairplot(df)
  
         # Display the plot in Streamlit
-        st.pyplot(plot.fig)
+        
         conn.close()
 
 
