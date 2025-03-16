@@ -27,7 +27,7 @@ def analyze_sales(df,df1):
     print("daily", daily_sales)
     print("weekly",weekly_sales)
     # Identify best-selling products
-    best_selling = df.groupby('product_id')['quantity_sold'].sum().nlargest(4)
+    best_selling = df.groupby('product_id')['quantity_sold'].sum()
     merged_df = pd.merge(best_selling, df1, on='product_id', how='inner')
 
 # Remove the 'product_id' column
