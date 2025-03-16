@@ -6,3 +6,4 @@ streamlit-pdf-viewer==0.0.14
 pandas
 seaborn
 matplotlib
+plotly
