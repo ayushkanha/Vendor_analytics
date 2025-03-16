@@ -3,6 +3,7 @@ import sqlite3
 import seaborn as sns
 from visuals import fetch_sales_data
 from visuals import analyze_sales
+import matplotlib.pyplot as plt
 
 def analytics():
 
