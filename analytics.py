@@ -10,6 +10,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import plotly.express as px
 
 def analytics():
     conn = sqlite3.connect('example.db')
@@ -53,8 +54,8 @@ def analytics():
         ax.pie(product_revenue["total_price"], labels=product_revenue["product_name"], autopct="%1.1f%%")
         st.pyplot(fig)
 
-       
-
+        fig = px.pie(product_revenue["total_price"], names='product_name')
+        st.plotly_chart(fig, theme="streamlit")
     conn.close()
 
 
