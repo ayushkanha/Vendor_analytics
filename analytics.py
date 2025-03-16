@@ -5,42 +5,70 @@ from visuals import fetch_sales_data
 from visuals import analyze_sales
 import matplotlib.pyplot as plt
 
-def analytics():
+import sqlite3
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+def analytics():
     conn = sqlite3.connect('example.db')
-    if st.button("show analytics"):
-        sales_df,df = fetch_sales_data(conn)
+
+    if st.button("Show Analytics"):
+        # Fetch sales and product data
+        sales_df, product_df = fetch_sales_data(conn)
 
         # Analyze sales data
-        daily_sales, weekly_sales, monthly_sales, best_selling, total_revenue = analyze_sales(sales_df,df)
+        daily_sales, weekly_sales, monthly_sales, best_selling, total_revenue = analyze_sales(sales_df, product_df)
 
-        # Display total revenue
+        # 🟢 Total Revenue
         st.title(f"**Total Revenue:** :blue[₹{total_revenue:.2f}]")
 
-        # Display best-selling products
+        # 🟢 Best-Selling Products
         st.title("**Best-Selling :blue[Products]:**")
         st.bar_chart(best_selling, x="product_name", y="quantity_sold")
 
-        # Display sales trends
+        # 🟢 Least-Selling Products
+        least_selling = best_selling.nsmallest(5, "quantity_sold")
+        st.title("**Least-Selling :blue[Products]:**")
+        st.bar_chart(least_selling, x="product_name", y="quantity_sold")
+
+        # 🟢 Sales Trends
         st.title("**Sales :blue[Trends]:**")
-        st.subheader("Daly Sales :blue[Trends]", divider=True)
+        st.subheader("Daily Sales :blue[Trends]", divider=True)
         st.line_chart(daily_sales)
         st.subheader("Weekly Sales :blue[Trends]", divider=True)
         st.line_chart(weekly_sales)
         st.subheader("Monthly Sales :blue[Trends]", divider=True)
         st.line_chart(monthly_sales)
-        plot = sns.pairplot(df)
- 
-        # Display the plot in Streamlit
-        product_revenue = sales_df.groupby("product_id")["total_price"].sum().reset_index()
 
-        # Merge with product names from product_df
+        # 🟢 Pairplot Visualization
+        st.title("**Pairplot :blue[Visualization]**")
+        plot = sns.pairplot(product_df)
+        st.pyplot(plot)
+
+        # 🟢 Revenue Contribution by Product (Pie Chart)
+        product_revenue = sales_df.groupby("product_id")["total_price"].sum().reset_index()
         product_revenue = product_revenue.merge(product_df[["product_id", "product_name"]], on="product_id")
+
         st.title("**Revenue Contribution by :blue[Product]**")
         fig, ax = plt.subplots()
         ax.pie(product_revenue["total_price"], labels=product_revenue["product_name"], autopct="%1.1f%%")
         st.pyplot(fig)
-        conn.close()
+
+        # 🟢 Peak Sales Day & Lowest Sales Day
+        peak_day = daily_sales.loc[daily_sales["total_price"].idxmax()]
+        low_day = daily_sales.loc[daily_sales["total_price"].idxmin()]
+        st.metric(label="📈 Peak Sales Day", value=peak_day["sale_date"], delta=f"₹{peak_day['total_price']:.2f}")
+        st.metric(label="📉 Lowest Sales Day", value=low_day["sale_date"], delta=f"₹{low_day['total_price']:.2f}")
+
+        # 🟢 Average Order Value (AOV)
+        total_orders = len(sales_df)  # Number of sales transactions
+        aov = total_revenue / total_orders if total_orders > 0 else 0
+        st.metric(label="💰 Average Order Value (AOV)", value=f"₹{aov:.2f}")
+
+    conn.close()
+
 
 
 
