@@ -42,10 +42,7 @@ def analytics():
         st.subheader("Monthly Sales :blue[Trends]", divider=True)
         st.line_chart(monthly_sales)
 
-        # 🟢 Pairplot Visualization
-        st.title("**Pairplot :blue[Visualization]**")
-        plot = sns.pairplot(product_df)
-        st.pyplot(plot)
+       
 
         # 🟢 Revenue Contribution by Product (Pie Chart)
         product_revenue = sales_df.groupby("product_id")["total_price"].sum().reset_index()
@@ -56,16 +53,7 @@ def analytics():
         ax.pie(product_revenue["total_price"], labels=product_revenue["product_name"], autopct="%1.1f%%")
         st.pyplot(fig)
 
-        # 🟢 Peak Sales Day & Lowest Sales Day
-        peak_day = daily_sales.loc[daily_sales["total_price"].idxmax()]
-        low_day = daily_sales.loc[daily_sales["total_price"].idxmin()]
-        st.metric(label="📈 Peak Sales Day", value=peak_day["sale_date"], delta=f"₹{peak_day['total_price']:.2f}")
-        st.metric(label="📉 Lowest Sales Day", value=low_day["sale_date"], delta=f"₹{low_day['total_price']:.2f}")
-
-        # 🟢 Average Order Value (AOV)
-        total_orders = len(sales_df)  # Number of sales transactions
-        aov = total_revenue / total_orders if total_orders > 0 else 0
-        st.metric(label="💰 Average Order Value (AOV)", value=f"₹{aov:.2f}")
+       
 
     conn.close()
 
