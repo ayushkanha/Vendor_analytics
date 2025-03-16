@@ -31,7 +31,10 @@ def analytics():
         plot = sns.pairplot(df)
  
         # Display the plot in Streamlit
-        
+        st.title("**Revenue Contribution by :blue[Product]**")
+        fig, ax = plt.subplots()
+        ax.pie(product_revenue["total_price"], labels=product_revenue["product_name"], autopct="%1.1f%%")
+        st.pyplot(fig)
         conn.close()
 
 
